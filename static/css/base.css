@@ -1,0 +1,17 @@
+h1{color: #b72f5f;
+}
+
+.wmd-panel{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+}
+
+.comment-reply{
+    display:none;
+}
+
+
+body {background:#ddd}
+table {background:#a3adb7;border:1px #ddd}
+td {border:none}

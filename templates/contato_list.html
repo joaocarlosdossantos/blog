@@ -1,0 +1,128 @@
+{% extends "base_post.html" %}
+
+{% block head_title %}
+    {{instance.title}} | {{ block.super }}
+{% endblock head_title %}
+
+{% block content %}
+
+
+<div class="row">
+     <div class="col-2 col-md-2">
+        <div class="col-sm-9 col-sm-offset-9" xmlns:min-width="http://www.w3.org/1999/xhtml">
+
+
+
+        <div class="table-responsive-sm">
+          <table  class="table">
+            <tbody>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <h3>{{"Recipentes" }}</h3>
+               <tr>
+                   <td align="right" ><a href="{% url 'contatolist' %}">
+                   <img src="/static/img/resposta.png"/></a></td>
+                   <td align="Left" ><a href="{% url 'contatolist' %}"> Pendêntes </a>({{ emabertos }})</td>
+
+               </tr>
+               <tr>
+                   <td align="right"><a href="{% url 'contatolistrespondidos' %}">
+                   <img src="/static/img/resposta_2.png"/></a></td>
+                   <td align="Left" ><a href="{% url 'contatolistrespondidos' %}"> Respondidos </a>({{ respondidos }})</td>
+               </tr>
+               <tr>
+                   <td align="right"><a href="{% url 'contatolistpreexcluidos' %}">
+                   <img src="/static/img/lixeira.png"/></a></td>
+                   <td align="Left" ><a href="{% url 'contatolistpreexcluidos' %}"> Excluidos </a>({{ excluidos }})</td>
+               </tr>
+            </tbody>
+          </table>
+                </div>
+        </div>
+     </div>
+
+  <div class="col-12 col-md-6">
+
+<div class="col-sm-12 col-sm-offset-2" xmlns:min-width="http://www.w3.org/1999/xhtml">
+   <h3>{{ title }}</h3>
+    <form method="get" action="" class="row">
+      <div class="col-sm-12">
+        <div class="input-group">
+            <input class="form-control" type="text" name="q" placeholder="Buscar contatos ..." value="{{ request.GET.q }}">
+             <span class="input-group-btn">
+                 <!--- <input class="btn btn-default" type="submit" value="Search"> -->
+                 <button class="btn btn-default" type="submit">Search <i class="fa fa-search"></i></button>
+             </span>
+        </div>
+      </div>
+    </form>
+<div class="table-responsive-sm">
+    <table class="table table-bordered" >
+       <thead>
+         <tr>
+           <th scope="col">Responder</th>
+           <th scope="col">Excluir</th>
+           <th scope="col">Nome</th>
+           <th scope="col">Email</th>
+           <th scope="col">Data/Hora</th>
+         </tr>
+       </thead>
+       <tbody>
+        {% for obj in object_list %}
+         <tr>
+
+           {% if title == 'Respondidos' %}
+               <td align="center" vAlign="middle"><a href="{{ obj.get_resposta_url }}">
+               <img src="/static/img/resposta.png"/></a></td>
+               <td align="center" vAlign="middle"><a href="{{ obj.get_preexclusao_url }}">
+               <img src="/static/img/lixeira_2.png" /></a></td>
+           {% endif %}
+
+           {% if title == 'Pendêntes' %}
+               <td align="center" vAlign="middle"><a href="{{ obj.get_resposta_url }}">
+               <img src="/static/img/resposta.png"/></a></td>
+               <td align="center" vAlign="middle"><a href="{{ obj.get_preexclusao_url }}">
+               <img src="/static/img/lixeira_2.png" /></a></td>
+           {% endif %}
+
+           {% if title == 'Excluídos' %}
+               <td align="center" vAlign="middle"><a href="{{ obj.get_resposta_url }}">
+               <img src="/static/img/resposta.png"/></a></td>
+               <td align="center" vAlign="middle"><a href="{{ obj.get_delete_url }}">
+               <img src="/static/img/lixeira_2.png" /></a></td>
+           {% endif %}
+
+           <td align="left"><small>{{ obj.nome }}</small></td>
+           <td align="left"><small>{{ obj.email }}</small></td>
+           <td align="left"><small>{{ obj.updated.day }}/{{ obj.updated.month }}/{{ obj.updated.year }}
+           ({{ obj.updated.time }})</small></td>
+         </tr>
+        {% endfor %}
+       </tbody>
+    </table>
+</div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if object_list.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ object_list.previous_page_number }}&q={{ request.GET.q }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+            </span>
+
+            {% if object_list.has_next %}
+                <a href="?page={{ object_list.next_page_number }}&q={{ request.GET.q }}">next</a>
+                <a href="?page={{ object_list.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+      </div>
+</div>
+{% endblock content %}
